@@ -1,0 +1,852 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Hannah Perez — UGC Creator</title>
+<meta name="description" content="Hannah Perez (@opus.ugc) — UGC Creator specializing in tech, beauty, and lifestyle content.">
+
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:ital,opsz,wght@0,9..144,300;0,9..144,400;0,9..144,500;0,9..144,600;1,9..144,400&family=Pinyon+Script&family=Jost:wght@300;400;500;600&display=swap" rel="stylesheet">
+
+<style>
+  /* ============ TOKENS ============ */
+  :root{
+    --void:      #170e26;
+    --plum:      #2b1a42;
+    --plum-soft: #35224f;
+    --cream:     #f2ece0;
+    --lavender:  #b6acd6;
+    --lavender-dim: #8577a8;
+    --gold:      #c9a876;
+    --ink:       #2b1a42;
+
+    --display: 'Fraunces', serif;
+    --script:  'Pinyon Script', cursive;
+    --sans:    'Jost', sans-serif;
+
+    --edge: clamp(1.5rem, 5vw, 5rem);
+    --ease: cubic-bezier(.22,.68,.2,1);
+  }
+
+  *{ margin:0; padding:0; box-sizing:border-box; }
+
+  html{ scroll-behavior:smooth; }
+
+  body{
+    background: var(--void);
+    color: var(--cream);
+    font-family: var(--sans);
+    font-weight:300;
+    line-height:1.6;
+    overflow-x:hidden;
+    cursor: none;
+  }
+
+  @media (pointer:coarse){
+    body{ cursor:auto; }
+  }
+
+  a{ color:inherit; text-decoration:none; }
+  ul{ list-style:none; }
+  img{ display:block; max-width:100%; }
+
+  ::selection{ background:var(--gold); color:var(--ink); }
+
+  /* ============ GRAIN ============ */
+  .grain{
+    position:fixed; inset:-100px;
+    z-index:9998;
+    pointer-events:none;
+    opacity:.05;
+    mix-blend-mode:overlay;
+    background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='180' height='180'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='2' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E");
+    animation: grain-drift 8s steps(6) infinite;
+  }
+  @keyframes grain-drift{
+    0%{ transform:translate(0,0); }
+    20%{ transform:translate(-3%,-2%); }
+    40%{ transform:translate(2%,3%); }
+    60%{ transform:translate(-2%,2%); }
+    80%{ transform:translate(3%,-3%); }
+    100%{ transform:translate(0,0); }
+  }
+
+  /* ============ CUSTOM CURSOR ============ */
+  .cursor{
+    position:fixed; top:0; left:0;
+    width:26px; height:26px;
+    border:1px solid var(--gold);
+    border-radius:50%;
+    pointer-events:none;
+    z-index:9999;
+    transform:translate(-50%,-50%);
+    transition:width .25s var(--ease), height .25s var(--ease), border-color .25s var(--ease), opacity .3s;
+    will-change:transform;
+  }
+  .cursor::after{
+    content:'';
+    position:absolute; top:50%; left:50%;
+    width:3px; height:3px;
+    background:var(--gold);
+    border-radius:50%;
+    transform:translate(-50%,-50%);
+  }
+  .cursor.hover{ width:56px; height:56px; border-color:var(--cream); }
+  @media (pointer:coarse){ .cursor{ display:none; } }
+
+  /* ============ IRIS INTRO ============ */
+  .iris{
+    position:fixed; inset:0;
+    z-index:10000;
+    background:var(--void);
+    display:flex; align-items:center; justify-content:center;
+    clip-path:circle(150% at 50% 50%);
+    transition:clip-path 1.4s var(--ease);
+  }
+  .iris.closed{ clip-path:circle(0% at 50% 50%); }
+  .iris.done{ display:none; }
+  .iris-ring{
+    width:120px; height:120px;
+    border:1px solid var(--gold);
+    border-radius:50%;
+    opacity:.6;
+    animation:iris-pulse 1.6s var(--ease) infinite;
+  }
+  @keyframes iris-pulse{
+    0%,100%{ transform:scale(.85); opacity:.35; }
+    50%{ transform:scale(1); opacity:.7; }
+  }
+
+  @media (prefers-reduced-motion:reduce){
+    .iris{ transition:none; }
+    .iris-ring{ animation:none; }
+    html{ scroll-behavior:auto; }
+  }
+
+  /* ============ NAV / CORNER LABELS ============ */
+  .frame-bar{
+    position:fixed; top:0; left:0; right:0;
+    z-index:500;
+    display:flex; justify-content:space-between; align-items:center;
+    padding: 1.1rem var(--edge);
+    font-family:var(--sans);
+    font-size:.72rem;
+    letter-spacing:.18em;
+    text-transform:uppercase;
+    color:var(--lavender);
+    border-bottom:1px solid rgba(201,168,118,.25);
+    background:linear-gradient(to bottom, rgba(23,14,38,.75), transparent);
+    backdrop-filter:blur(2px);
+  }
+  .frame-bar .mark{ color:var(--cream); letter-spacing:.14em; }
+  .frame-bar .eyebrow{ transition:opacity .4s var(--ease); }
+
+  /* ============ SECTION SCAFFOLD ============ */
+  section{
+    position:relative;
+    padding: clamp(6rem,14vh,9rem) var(--edge);
+  }
+  .section-number{
+    font-family:var(--display);
+    font-weight:300;
+    font-size:clamp(3rem,9vw,7rem);
+    color:rgba(242,236,224,.06);
+    position:absolute;
+    top:1.5rem; right:var(--edge);
+    line-height:1;
+    user-select:none;
+  }
+  .reveal{
+    opacity:0;
+    transform:translateY(28px);
+    transition:opacity .9s var(--ease), transform .9s var(--ease);
+  }
+  .reveal.in-view{ opacity:1; transform:translateY(0); }
+  @media (prefers-reduced-motion:reduce){
+    .reveal{ opacity:1; transform:none; transition:none; }
+  }
+
+  .hairline{
+    width:100%; height:1px;
+    background:linear-gradient(to right, var(--gold), transparent);
+    opacity:.5;
+    margin: 1.5rem 0;
+  }
+
+  .script-accent{
+    font-family:var(--script);
+    font-weight:400;
+    color:var(--lavender);
+    line-height:1;
+  }
+
+  /* ============ HERO ============ */
+  .hero{
+    min-height:100vh;
+    display:flex; flex-direction:column; align-items:center; justify-content:center;
+    text-align:center;
+    padding-top:6rem;
+    background:
+      radial-gradient(circle at 50% 38%, var(--plum-soft) 0%, var(--plum) 45%, var(--void) 100%);
+  }
+  .hero-frame{
+    position:relative;
+    width:min(70vw, 380px);
+    aspect-ratio:1/1;
+    border-radius:50%;
+    overflow:hidden;
+    margin-bottom:2.5rem;
+    box-shadow:0 0 0 1px rgba(201,168,118,.4), 0 40px 90px -30px rgba(0,0,0,.8);
+    animation:breathe 7s var(--ease) infinite;
+  }
+  @keyframes breathe{
+    0%,100%{ transform:scale(1); }
+    50%{ transform:scale(1.015); }
+  }
+  .hero-frame img{ width:100%; height:100%; object-fit:cover; }
+  .hero-frame::after{
+    content:'';
+    position:absolute; inset:0;
+    background:linear-gradient(180deg, rgba(23,14,38,0) 55%, rgba(23,14,38,.55) 100%);
+  }
+  .hero h1{
+    font-family:var(--display);
+    font-weight:400;
+    letter-spacing:.08em;
+    font-size:clamp(2.6rem, 8vw, 5.2rem);
+    text-transform:uppercase;
+    display:flex; align-items:baseline; justify-content:center; gap:.3rem; flex-wrap:wrap;
+  }
+  .hero h1 .script-accent{ font-size:1.4em; text-transform:none; letter-spacing:0; }
+  .hero .role{
+    margin-top:1rem;
+    font-size:.85rem;
+    letter-spacing:.35em;
+    text-transform:uppercase;
+    color:var(--lavender);
+  }
+  .hero .meta{
+    margin-top:2.2rem;
+    display:flex; gap:1.8rem; flex-wrap:wrap; justify-content:center;
+    font-size:.8rem;
+    letter-spacing:.08em;
+    color:var(--lavender-dim);
+  }
+  .hero .meta a:hover{ color:var(--cream); }
+  .scroll-cue{
+    position:absolute; bottom:2.4rem; left:50%; transform:translateX(-50%);
+    font-size:.68rem; letter-spacing:.3em; text-transform:uppercase; color:var(--lavender-dim);
+    display:flex; flex-direction:column; align-items:center; gap:.6rem;
+  }
+  .scroll-cue .line{ width:1px; height:34px; background:linear-gradient(var(--gold), transparent); animation:cue-drop 2s var(--ease) infinite; }
+  @keyframes cue-drop{ 0%{opacity:0; transform:scaleY(0); transform-origin:top;} 40%{opacity:1; transform:scaleY(1); transform-origin:top;} 100%{opacity:0; transform:scaleY(1); transform-origin:bottom;} }
+
+  /* ============ ABOUT ============ */
+  .about-grid{
+    display:grid;
+    grid-template-columns: minmax(220px, 380px) 1fr;
+    gap:clamp(2rem,6vw,5rem);
+    align-items:start;
+    max-width:1200px;
+    margin:0 auto;
+  }
+  .about-photo{
+    border-radius:4px;
+    overflow:hidden;
+    aspect-ratio:4/5;
+    box-shadow:0 30px 70px -30px rgba(0,0,0,.7);
+  }
+  .about-photo img{ width:100%; height:100%; object-fit:cover; filter:saturate(.92); }
+  .about-name{
+    font-family:var(--display);
+    font-size:clamp(2.4rem,6vw,4rem);
+    text-transform:uppercase;
+    letter-spacing:.05em;
+    line-height:1;
+  }
+  .about-name .script-accent{
+    display:block;
+    text-transform:none;
+    font-size:1.5em;
+    margin-top:.1em;
+  }
+  .about-bio{
+    margin-top:1.6rem;
+    max-width:46ch;
+    font-size:1.05rem;
+    color:var(--cream);
+    font-weight:300;
+  }
+  .about-col-label{
+    font-size:.72rem; letter-spacing:.22em; text-transform:uppercase; color:var(--gold);
+    margin:2.4rem 0 1rem;
+  }
+  .niche-list li, .why-list li{
+    padding:.55rem 0 .55rem 1.4rem;
+    position:relative;
+    border-top:1px solid rgba(201,168,118,.18);
+    font-size:.95rem;
+    color:var(--lavender);
+  }
+  .niche-list li:last-child, .why-list li:last-child{ border-bottom:1px solid rgba(201,168,118,.18); }
+  .niche-list li::before, .why-list li::before{
+    content:'\2192';
+    position:absolute; left:0; color:var(--gold);
+  }
+  .niche-list strong, .why-list strong{ color:var(--cream); font-weight:500; }
+
+  /* ============ INTRO VIDEO ============ */
+  .intro-video-section{
+    display:grid;
+    grid-template-columns: minmax(240px,420px) 1fr;
+    gap:clamp(2rem,6vw,5rem);
+    align-items:center;
+    max-width:1200px;
+    margin:0 auto;
+  }
+  .video-frame{
+    position:relative;
+    aspect-ratio:9/16;
+    max-width:340px;
+    border-radius:6px;
+    overflow:hidden;
+    background:var(--plum-soft);
+    box-shadow:0 30px 80px -30px rgba(0,0,0,.75), 0 0 0 1px rgba(201,168,118,.25);
+    cursor:pointer;
+  }
+  .video-frame img, .video-frame video{ width:100%; height:100%; object-fit:cover; }
+  .video-frame video{ display:none; }
+  .video-frame.playing img{ display:none; }
+  .video-frame.playing video{ display:block; }
+  .play-glyph{
+    position:absolute; top:50%; left:50%; transform:translate(-50%,-50%);
+    width:56px; height:56px; border-radius:50%;
+    border:1px solid var(--cream);
+    display:flex; align-items:center; justify-content:center;
+    transition:transform .3s var(--ease), background .3s var(--ease);
+    background:rgba(23,14,38,.35);
+  }
+  .video-frame:hover .play-glyph{ transform:translate(-50%,-50%) scale(1.1); background:rgba(23,14,38,.6); }
+  .play-glyph svg{ width:16px; height:16px; fill:var(--cream); margin-left:3px; }
+  .video-frame.playing .play-glyph{ display:none; }
+  .video-frame.unavailable::after{
+    content:'video coming soon';
+    position:absolute; bottom:.9rem; left:0; right:0;
+    text-align:center;
+    font-size:.68rem; letter-spacing:.15em; text-transform:uppercase;
+    color:var(--lavender);
+  }
+  .video-frame.unavailable .play-glyph{ display:none; }
+
+  .paper-plane{ width:100%; max-width:260px; opacity:.85; }
+  .intro-copy h2{
+    font-family:var(--display);
+    font-size:clamp(2rem,5vw,3.2rem);
+    text-transform:uppercase;
+    letter-spacing:.05em;
+  }
+  .intro-copy .script-accent{ display:block; font-size:1.7em; margin-top:.05em; }
+  .intro-copy p{ margin-top:1.2rem; color:var(--lavender); max-width:36ch; font-size:.95rem; }
+
+  /* ============ PORTFOLIO TABS ============ */
+  .section-head{ text-align:center; max-width:700px; margin:0 auto 3rem; }
+  .section-head h2{
+    font-family:var(--display);
+    font-size:clamp(2.2rem,6vw,3.6rem);
+    text-transform:uppercase;
+    letter-spacing:.05em;
+  }
+  .section-head .script-accent{ font-size:1.5em; text-transform:none; }
+
+  .tabs{
+    display:flex; justify-content:center; gap:.5rem;
+    flex-wrap:wrap;
+    margin-bottom:3rem;
+  }
+  .tab-btn{
+    font-family:var(--sans);
+    font-size:.78rem; letter-spacing:.15em; text-transform:uppercase;
+    color:var(--lavender-dim);
+    background:transparent;
+    border:1px solid rgba(201,168,118,.3);
+    padding:.65rem 1.4rem;
+    border-radius:999px;
+    cursor:pointer;
+    transition:all .35s var(--ease);
+  }
+  .tab-btn:hover{ color:var(--cream); border-color:var(--gold); }
+  .tab-btn.active{ background:var(--gold); color:var(--ink); border-color:var(--gold); }
+
+  .video-grid{
+    display:grid;
+    grid-template-columns:repeat(auto-fill, minmax(200px,1fr));
+    gap:1.6rem;
+    max-width:1200px;
+    margin:0 auto;
+  }
+  .video-card{ display:none; }
+  .video-card.show{ display:block; animation:card-in .5s var(--ease); }
+  @keyframes card-in{ from{opacity:0; transform:translateY(14px);} to{opacity:1; transform:translateY(0);} }
+  .video-card .video-frame{ max-width:none; margin-bottom:.8rem; }
+  .video-card .cat-label{
+    font-size:.7rem; letter-spacing:.15em; text-transform:uppercase; color:var(--gold);
+  }
+  .video-card .cap{
+    font-size:.82rem; color:var(--lavender); margin-top:.15rem;
+  }
+
+  /* ============ PHOTO GALLERY ============ */
+  .gallery-grid{
+    display:grid;
+    grid-template-columns:repeat(4, 1fr);
+    gap:1.2rem;
+    max-width:1200px;
+    margin:0 auto;
+  }
+  .gallery-grid a{
+    display:block;
+    border-radius:4px;
+    overflow:hidden;
+    aspect-ratio:4/5;
+    box-shadow:0 20px 50px -25px rgba(0,0,0,.6);
+  }
+  .gallery-grid a:nth-child(2){ aspect-ratio:4/5; margin-top:2.4rem; }
+  .gallery-grid a:nth-child(3){ margin-top:-1.2rem; }
+  .gallery-grid img{ width:100%; height:100%; object-fit:cover; transition:transform .6s var(--ease); }
+  .gallery-grid a:hover img{ transform:scale(1.05); }
+
+  @media (max-width:820px){
+    .gallery-grid{ grid-template-columns:repeat(2,1fr); }
+    .gallery-grid a:nth-child(2), .gallery-grid a:nth-child(3){ margin-top:0; }
+  }
+
+  /* ============ RATE CARD ============ */
+  .rates-wrap{ display:flex; justify-content:center; }
+  .rate-card{
+    background:var(--cream);
+    color:var(--ink);
+    border-radius:6px;
+    padding:clamp(2rem,5vw,3.5rem);
+    max-width:760px;
+    width:100%;
+    box-shadow:0 60px 120px -40px rgba(0,0,0,.85);
+    display:grid;
+    grid-template-columns:1fr 1fr;
+    gap:2.5rem;
+  }
+  .rate-card .rc-name{
+    font-family:var(--display);
+    font-size:2.2rem;
+    text-transform:uppercase;
+    letter-spacing:.04em;
+    color:var(--ink);
+  }
+  .rate-card .rc-name .script-accent{ display:block; font-size:1.5em; color:var(--ink); margin-top:-.1em; }
+  .rate-card .rc-tag{ font-size:.85rem; color:#5b4a78; margin-top:1rem; max-width:32ch; }
+  .rc-title{
+    font-size:.75rem; letter-spacing:.2em; text-transform:uppercase; color:#5b4a78;
+    margin-bottom:1rem;
+  }
+  .rate-rows{ font-size:.92rem; }
+  .rate-rows li{
+    display:flex; justify-content:space-between; gap:1rem;
+    padding:.55rem 0;
+    border-bottom:1px dashed rgba(43,26,66,.2);
+  }
+  .rate-rows li span:last-child{ font-weight:500; white-space:nowrap; }
+  .rc-extras{ margin-top:1.6rem; font-size:.82rem; color:#5b4a78; }
+  .rc-extras div{ display:flex; justify-content:space-between; padding:.3rem 0; }
+
+  @media (max-width:700px){
+    .rate-card{ grid-template-columns:1fr; }
+  }
+
+  /* ============ CONTACT ============ */
+  .contact-wrap{
+    display:grid;
+    grid-template-columns:1fr 1fr;
+    gap:clamp(2rem,6vw,5rem);
+    max-width:1100px;
+    margin:0 auto;
+    align-items:center;
+  }
+  .contact-heading{
+    font-family:var(--display);
+    font-size:clamp(2.4rem,6vw,4rem);
+    text-transform:uppercase;
+  }
+  .contact-heading .script-accent{ text-transform:none; font-size:1.4em; }
+  .contact-lead{ color:var(--lavender); margin:1.2rem 0 2rem; max-width:36ch; }
+
+  .folder-grid{
+    display:grid;
+    grid-template-columns:1fr 1fr;
+    gap:1.2rem;
+  }
+  .folder{
+    background:var(--plum-soft);
+    border:1px solid rgba(201,168,118,.25);
+    border-radius:6px;
+    padding:1.4rem;
+    transition:transform .35s var(--ease), border-color .35s var(--ease);
+    display:flex; flex-direction:column; gap:.7rem;
+  }
+  .folder:hover{ transform:translateY(-6px); border-color:var(--gold); }
+  .folder svg{ width:26px; height:26px; stroke:var(--gold); fill:none; stroke-width:1.4; }
+  .folder .f-label{ font-size:.68rem; letter-spacing:.16em; text-transform:uppercase; color:var(--lavender-dim); }
+  .folder .f-value{ font-size:.95rem; color:var(--cream); word-break:break-word; }
+
+  footer{
+    text-align:center;
+    padding:3rem var(--edge) 4rem;
+    font-size:.72rem; letter-spacing:.15em; text-transform:uppercase;
+    color:var(--lavender-dim);
+  }
+
+  @media (max-width:900px){
+    .about-grid, .intro-video-section, .contact-wrap{ grid-template-columns:1fr; }
+    .about-photo{ max-width:320px; }
+  }
+</style>
+</head>
+<body>
+
+  <div class="grain"></div>
+  <div class="cursor" id="cursor"></div>
+
+  <div class="iris" id="iris"><div class="iris-ring"></div></div>
+
+  <div class="frame-bar">
+    <span class="mark">@opus.ugc</span>
+    <span class="eyebrow" id="eyebrow">Portfolio</span>
+  </div>
+
+  <!-- ============ HERO ============ -->
+  <section class="hero" id="hero" data-eyebrow="Portfolio">
+    <div class="hero-frame">
+      <img src="assets/hero-photo.jpg" alt="Hannah Perez holding a camera">
+    </div>
+    <h1>Port<span class="script-accent">folio</span></h1>
+    <p class="role">UGC Creator</p>
+    <div class="meta">
+      <a href="https://instagram.com/opus.ugc" target="_blank" rel="noopener">@opus.ugc</a>
+      <span>·</span>
+      <a href="mailto:opus.ugc@gmail.com">opus.ugc@gmail.com</a>
+    </div>
+    <div class="scroll-cue"><span>Scroll</span><span class="line"></span></div>
+  </section>
+
+  <!-- ============ ABOUT ============ -->
+  <section id="about" data-eyebrow="Intro">
+    <span class="section-number">01</span>
+    <div class="about-grid">
+      <div class="about-photo reveal">
+        <img src="assets/about-photo.jpg" alt="Hannah Perez portrait">
+      </div>
+      <div>
+        <h2 class="about-name reveal">Hannah<span class="script-accent">Perez</span></h2>
+        <p class="about-bio reveal">Hi, I'm Hannah! I create captivating aesthetic UGC to help brands connect authentically with their audience.</p>
+
+        <p class="about-col-label reveal">Content Niches &amp; Styles</p>
+        <ul class="niche-list reveal">
+          <li><strong>Tech</strong> — I love tech, and how-to videos are my strongest area.</li>
+          <li><strong>Talking Heads</strong> — I love the interaction and connection these create with an audience.</li>
+          <li><strong>Beauty</strong> — I also create plenty of content around makeup and fashion.</li>
+        </ul>
+
+        <p class="about-col-label reveal">Why Work With Me</p>
+        <ul class="why-list reveal">
+          <li><strong>Fast &amp; reliable</strong> turnaround.</li>
+          <li><strong>Editorial</strong> &amp; aesthetic quality.</li>
+          <li><strong>Varied &amp; diverse</strong> hooks and storytelling.</li>
+        </ul>
+      </div>
+    </div>
+  </section>
+
+  <!-- ============ INTRO VIDEO ============ -->
+  <section id="intro-video" data-eyebrow="Intro Video">
+    <span class="section-number">01</span>
+    <div class="intro-video-section">
+      <div class="video-frame reveal" data-video="assets/intro-video.mp4" data-poster="assets/intro-poster.jpg">
+        <img src="assets/intro-poster.jpg" alt="Intro video preview">
+        <video playsinline muted loop></video>
+        <span class="play-glyph"><svg viewBox="0 0 24 24"><path d="M6 4l14 8-14 8z"/></svg></span>
+      </div>
+      <div class="intro-copy reveal">
+        <h2>Intro<span class="script-accent">Video</span></h2>
+        <p>A quick hello — who I am, what I make, and how I like to work with brands.</p>
+        <svg class="paper-plane" viewBox="0 0 300 200" fill="none" stroke="var(--cream)" stroke-width="1.5">
+          <path d="M20 170 C60 160, 70 140, 60 120 C90 130, 100 100, 90 90" stroke-dasharray="4 5"/>
+          <path d="M170 60 L280 20 L230 130 L200 90 L170 105 Z" stroke-linejoin="round"/>
+        </svg>
+      </div>
+    </div>
+  </section>
+
+  <!-- ============ VIDEO PORTFOLIO ============ -->
+  <section id="portfolio" data-eyebrow="Video Examples">
+    <span class="section-number">02</span>
+    <div class="section-head reveal">
+      <h2>Video<span class="script-accent">Examples</span></h2>
+    </div>
+    <div class="tabs reveal">
+      <button class="tab-btn active" data-cat="all">All</button>
+      <button class="tab-btn" data-cat="hair">Hair</button>
+      <button class="tab-btn" data-cat="fashion">Fashion</button>
+      <button class="tab-btn" data-cat="beauty">Beauty</button>
+      <button class="tab-btn" data-cat="tech">Tech</button>
+    </div>
+
+    <div class="video-grid reveal">
+
+      <div class="video-card show" data-cat="hair">
+        <div class="video-frame" data-video="assets/hair-video-1.mp4" data-poster="assets/hair-poster-1.jpg">
+          <img src="assets/hair-poster-1.jpg" alt="Hair content example 1">
+          <video playsinline muted loop></video>
+          <span class="play-glyph"><svg viewBox="0 0 24 24"><path d="M6 4l14 8-14 8z"/></svg></span>
+        </div>
+        <p class="cat-label">Hair</p>
+        <p class="cap">Enamel pin unboxing</p>
+      </div>
+
+      <div class="video-card show" data-cat="hair">
+        <div class="video-frame" data-video="assets/hair-video-2.mp4" data-poster="assets/hair-poster-2.jpg">
+          <img src="assets/hair-poster-2.jpg" alt="Hair content example 2">
+          <video playsinline muted loop></video>
+          <span class="play-glyph"><svg viewBox="0 0 24 24"><path d="M6 4l14 8-14 8z"/></svg></span>
+        </div>
+        <p class="cat-label">Hair</p>
+        <p class="cap">Teacher pin collection</p>
+      </div>
+
+      <div class="video-card show" data-cat="fashion">
+        <div class="video-frame" data-video="assets/fashion-video-1.mp4" data-poster="assets/fashion-poster-1.jpg">
+          <img src="assets/fashion-poster-1.jpg" alt="Fashion content example">
+          <video playsinline muted loop></video>
+          <span class="play-glyph"><svg viewBox="0 0 24 24"><path d="M6 4l14 8-14 8z"/></svg></span>
+        </div>
+        <p class="cat-label">Fashion</p>
+        <p class="cap">"POV: Aeropostale outfits for the week"</p>
+      </div>
+
+      <div class="video-card show" data-cat="beauty">
+        <div class="video-frame" data-video="assets/beauty-video-1.mp4" data-poster="assets/beauty-poster-1.jpg">
+          <img src="assets/beauty-poster-1.jpg" alt="Beauty content example">
+          <video playsinline muted loop></video>
+          <span class="play-glyph"><svg viewBox="0 0 24 24"><path d="M6 4l14 8-14 8z"/></svg></span>
+        </div>
+        <p class="cat-label">Beauty</p>
+        <p class="cap">Lip liner review</p>
+      </div>
+
+      <div class="video-card show" data-cat="tech">
+        <div class="video-frame" data-video="assets/tech-video-1.mp4" data-poster="assets/tech-poster-1.jpg">
+          <img src="assets/tech-poster-1.jpg" alt="Tech content example 1">
+          <video playsinline muted loop></video>
+          <span class="play-glyph"><svg viewBox="0 0 24 24"><path d="M6 4l14 8-14 8z"/></svg></span>
+        </div>
+        <p class="cat-label">Tech</p>
+        <p class="cap">"I started using Notion"</p>
+      </div>
+
+      <div class="video-card show" data-cat="tech">
+        <div class="video-frame" data-video="assets/tech-video-2.mp4" data-poster="assets/tech-poster-2.jpg">
+          <img src="assets/tech-poster-2.jpg" alt="Tech content example 2">
+          <video playsinline muted loop></video>
+          <span class="play-glyph"><svg viewBox="0 0 24 24"><path d="M6 4l14 8-14 8z"/></svg></span>
+        </div>
+        <p class="cat-label">Tech</p>
+        <p class="cap">"I have spent so much time..."</p>
+      </div>
+
+    </div>
+  </section>
+
+  <!-- ============ PHOTO GALLERY ============ -->
+  <section id="gallery" data-eyebrow="Photo Examples">
+    <span class="section-number">03</span>
+    <div class="section-head reveal">
+      <h2>Photo<span class="script-accent">Examples</span></h2>
+    </div>
+    <div class="gallery-grid reveal">
+      <a href="assets/photo-1.jpg" target="_blank" rel="noopener"><img src="assets/photo-1.jpg" alt="Bvlgari Rose Goldea Blossom Delight"></a>
+      <a href="assets/photo-2.jpg" target="_blank" rel="noopener"><img src="assets/photo-2.jpg" alt="Olay Vitamin C moisturizer"></a>
+      <a href="assets/photo-3.jpg" target="_blank" rel="noopener"><img src="assets/photo-3.jpg" alt="Réparneu anti-aging cream"></a>
+      <a href="assets/photo-4.jpg" target="_blank" rel="noopener"><img src="assets/photo-4.jpg" alt="Lip Liner Stay-N pencils"></a>
+    </div>
+  </section>
+
+  <!-- ============ RATE CARD ============ -->
+  <section id="rates" data-eyebrow="Rate Card">
+    <span class="section-number">04</span>
+    <div class="rates-wrap reveal">
+      <div class="rate-card">
+        <div>
+          <p class="rc-name">Hannah<span class="script-accent">Perez</span></p>
+          <p style="font-weight:600; letter-spacing:.1em; margin-top:.6rem; font-size:.85rem;">OPUS.UGC</p>
+          <p class="rc-tag">Creating high-converting UGC designed to elevate brand identity and drive engagement through authentic visual storytelling.</p>
+        </div>
+        <div>
+          <p class="rc-title">Rates</p>
+          <ul class="rate-rows">
+            <li><span>1 Video + 1 Photo</span><span>$500</span></li>
+            <li><span>3 Multi-Concept Videos</span><span>$1,200</span></li>
+            <li><span>2 Videos + 2 Photos</span><span>$1,300</span></li>
+            <li><span>5 Videos + 5 Photos</span><span>$2,000</span></li>
+            <li><span>2 Concepts × 3 Hook Variations (6 videos) + 3 Photos</span><span>$2,300</span></li>
+          </ul>
+          <div class="rc-extras">
+            <div><span>Whitelisting</span><span>$200</span></div>
+            <div><span>Each revision</span><span>$200</span></div>
+            <div><span>Raw footage</span><span>40% of base rate</span></div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ============ CONTACT ============ -->
+  <section id="contact" data-eyebrow="Contact">
+    <span class="section-number">05</span>
+    <div class="contact-wrap">
+      <div class="reveal">
+        <h2 class="contact-heading">Contact<span class="script-accent">Me</span></h2>
+        <p class="contact-lead">I would love to be able to work with you creatively.</p>
+      </div>
+      <div class="folder-grid reveal">
+        <a class="folder" href="tel:4699274502">
+          <svg viewBox="0 0 24 24"><path d="M4 4h4l2 5-2.5 1.5a11 11 0 0 0 5 5L14 13l5 2v4a2 2 0 0 1-2 2C9 21 3 15 3 6a2 2 0 0 1 1-2z"/></svg>
+          <span class="f-label">Phone</span>
+          <span class="f-value">469 927 4502</span>
+        </a>
+        <a class="folder" href="mailto:opus.ugc@gmail.com">
+          <svg viewBox="0 0 24 24"><path d="M3 5h18v14H3z"/><path d="M3 6l9 7 9-7"/></svg>
+          <span class="f-label">Email</span>
+          <span class="f-value">opus.ugc@gmail.com</span>
+        </a>
+        <a class="folder" href="https://instagram.com/opus.ugc" target="_blank" rel="noopener">
+          <svg viewBox="0 0 24 24"><rect x="3" y="3" width="18" height="18" rx="5"/><circle cx="12" cy="12" r="4"/><circle cx="17.2" cy="6.8" r="0.6" fill="var(--gold)" stroke="none"/></svg>
+          <span class="f-label">Instagram</span>
+          <span class="f-value">@opus.ugc</span>
+        </a>
+        <a class="folder" href="https://opusugc.github.io/opusugc/" target="_blank" rel="noopener">
+          <svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="9"/><path d="M3 12h18M12 3a14 14 0 0 1 0 18M12 3a14 14 0 0 0 0 18"/></svg>
+          <span class="f-label">Website</span>
+          <span class="f-value">opusugc.github.io</span>
+        </a>
+      </div>
+    </div>
+  </section>
+
+  <footer>Hannah Perez · Opus UGC · Built with care</footer>
+
+<script>
+(function(){
+  /* ---------- IRIS INTRO ---------- */
+  var iris = document.getElementById('iris');
+  window.addEventListener('load', function(){
+    setTimeout(function(){
+      iris.classList.add('closed');
+      setTimeout(function(){ iris.classList.add('done'); }, 1500);
+    }, 250);
+  });
+
+  /* ---------- CUSTOM CURSOR ---------- */
+  var cursor = document.getElementById('cursor');
+  var reduceMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+  if (!reduceMotion && window.matchMedia('(pointer: fine)').matches){
+    window.addEventListener('mousemove', function(e){
+      cursor.style.transform = 'translate(' + e.clientX + 'px,' + e.clientY + 'px) translate(-50%,-50%)';
+    });
+    document.querySelectorAll('a, button, .video-frame').forEach(function(el){
+      el.addEventListener('mouseenter', function(){ cursor.classList.add('hover'); });
+      el.addEventListener('mouseleave', function(){ cursor.classList.remove('hover'); });
+    });
+  }
+
+  /* ---------- SCROLL REVEAL ---------- */
+  var revealEls = document.querySelectorAll('.reveal');
+  if ('IntersectionObserver' in window){
+    var io = new IntersectionObserver(function(entries){
+      entries.forEach(function(entry){
+        if (entry.isIntersecting){
+          entry.target.classList.add('in-view');
+          io.unobserve(entry.target);
+        }
+      });
+    }, { threshold: 0.15 });
+    revealEls.forEach(function(el){ io.observe(el); });
+  } else {
+    revealEls.forEach(function(el){ el.classList.add('in-view'); });
+  }
+
+  /* ---------- CORNER EYEBROW LABEL ---------- */
+  var eyebrow = document.getElementById('eyebrow');
+  var sections = document.querySelectorAll('section[data-eyebrow]');
+  if ('IntersectionObserver' in window){
+    var labelIO = new IntersectionObserver(function(entries){
+      entries.forEach(function(entry){
+        if (entry.isIntersecting){
+          eyebrow.style.opacity = 0;
+          setTimeout(function(){
+            eyebrow.textContent = entry.target.getAttribute('data-eyebrow');
+            eyebrow.style.opacity = 1;
+          }, 200);
+        }
+      });
+    }, { threshold: 0.5 });
+    sections.forEach(function(s){ labelIO.observe(s); });
+  }
+
+  /* ---------- VIDEO TABS ---------- */
+  var tabBtns = document.querySelectorAll('.tab-btn');
+  var cards = document.querySelectorAll('.video-card');
+  tabBtns.forEach(function(btn){
+    btn.addEventListener('click', function(){
+      tabBtns.forEach(function(b){ b.classList.remove('active'); });
+      btn.classList.add('active');
+      var cat = btn.getAttribute('data-cat');
+      cards.forEach(function(card){
+        var match = (cat === 'all' || card.getAttribute('data-cat') === cat);
+        card.classList.toggle('show', match);
+      });
+    });
+  });
+
+  /* ---------- VIDEO PLAYBACK + GRACEFUL FALLBACK ---------- */
+  document.querySelectorAll('.video-frame').forEach(function(frame){
+    var src = frame.getAttribute('data-video');
+    if (!src) return;
+    var video = frame.querySelector('video');
+
+    frame.addEventListener('click', function(){
+      if (frame.classList.contains('unavailable')) return;
+      if (!frame.classList.contains('playing')){
+        video.src = src;
+        video.muted = false;
+        video.controls = true;
+        video.play().then(function(){
+          frame.classList.add('playing');
+        }).catch(function(){
+          frame.classList.add('unavailable');
+        });
+      }
+    });
+
+    /* Check up front whether the file actually exists yet (requires http/https serving, e.g. GitHub Pages) */
+    if (window.location.protocol.indexOf('http') === 0){
+      fetch(src, { method: 'HEAD' }).then(function(res){
+        if (!res.ok) frame.classList.add('unavailable');
+      }).catch(function(){
+        frame.classList.add('unavailable');
+      });
+    }
+  });
+})();
+</script>
+
+</body>
+</html>
